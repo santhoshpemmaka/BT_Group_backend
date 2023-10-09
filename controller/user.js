@@ -1,33 +1,6 @@
 
 const User = require('../models/user');
 
-// Register user.
-exports.postuserController = async(req,res,next) => {
-    try{
-        const {username,email,password} = req.body;
-        if(!username || !email || !password){
-            const errors = new Error("Please mention all inputs fields is required");
-            errors.statusCode = 400;
-            throw errors;
-        }
-
-        const newUser = new User({
-            username,
-            email,
-            password
-        });
-        await newUser.save();
-        res.status(200).json({
-            status : "OK",
-            message : "User is registered"
-        })
-    }
-    catch(err) {
-        res.status(err.statusCode || 500).json({
-            message : err.message
-        })
-    }
-}
 
 // Login user.
 exports.loginuserController = async(req,res,next) => {
@@ -38,8 +11,9 @@ exports.loginuserController = async(req,res,next) => {
             errors.statusCode = 400;
             throw errors;
         }
+        const results = await User.find();
         const result = await User.findOne({email:email});
-        if(result.username == null) {
+        if(result.email == null) {
             const errors = new Error("Email is incorrect");
             errors.statusCode = 400;
             throw errors;
@@ -49,6 +23,11 @@ exports.loginuserController = async(req,res,next) => {
                 status : "OK",
                 message : "Login is sucessful"
             })
+        }
+        else{
+            const errors = new Error("Password is incorrect");
+            errors.statusCode = 400;
+            throw errors;
         }
 
     }
