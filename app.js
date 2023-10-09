@@ -23,6 +23,7 @@ app.use((req,res,next) => {
     req.next();
 });
 
+mongoose.set("strictQuery", false); // overcome deploy error
 const databaseUrl = process.env.DATABASE_URL;
 mongoose.connect(databaseUrl)
 .then(result => {
