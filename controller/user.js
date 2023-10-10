@@ -11,7 +11,6 @@ exports.loginuserController = async(req,res,next) => {
             errors.statusCode = 400;
             throw errors;
         }
-        const results = await User.find();
         const result = await User.findOne({email:email});
         if(result.email == null) {
             const errors = new Error("Email is incorrect");
